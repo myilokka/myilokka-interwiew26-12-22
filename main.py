@@ -13,6 +13,12 @@ class RandomSignal:
     def add_program(self, program_id):
         self.available_programs[program_id] = True
 
+    def send_signal(self, program_id):
+        if self.available_programs[program_id]:
+            self.available_programs[program_id] = False
+            return self.result
+        return None
+
     def update(self):
         self.result = random.choice(self.choice)
         for key in self.available_programs:
@@ -22,17 +28,13 @@ class RandomSignal:
 
 class Program:
 
-    def __init__(self, signal, ):
+    def __init__(self, signal):
         self.r_signal = signal
         self.program_id = uuid.uuid4()
         signal.add_program(self.program_id)
 
     def signal(self):
-        if self.r_signal.available_programs[self.program_id]:
-            self.r_signal.available_programs[self.program_id] = False
-            return self.r_signal.result
-
-        return None
+        return self.r_signal.send_signal(self.program_id)
 
 
 if __name__ == "__main__":
